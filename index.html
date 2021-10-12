@@ -5,21 +5,39 @@
   <title>Document</title>
 </head>
 <body>
-  <img src="#">
-  <button>refresh</button>
+  <img src="#"><br><br>
+  <form onsubmit="return false">
+    <input type="text"> 
+    <button type="submit">Search</button><br><br>
+    <span id="errors"></span>
+</form>
   <script>
     const img = document.querySelector('img');
-    const btn = document.querySelector('button');
-    function fetchGIF() {
-        fetch('https://api.giphy.com/v1/gifs/translate?api_key=JP2EJSHFNB08NZds0ynuszFsUmkpuadO&s=cats', {mode: 'cors'})
+    const keyword = document.querySelector('input');
+    const btn = document.querySelector('button');;
+    const errorMessage = document.querySelector('#errors')
+    function fetchGIF(val) {
+        let URL = 'https://api.giphy.com/v1/gifs/translate?api_key=JP2EJSHFNB08NZds0ynuszFsUmkpuadO&s=' + val;
+        console.log(val);
+        fetch(URL, {mode: 'cors'})
         .then(function(response) {
         return response.json();
         })
         .then(function(response) {
-        img.src = response.data.images.original.url;
-        })};
-    btn.addEventListener('click', fetchGIF);
-    fetchGIF();
+            if(response.data.length === 0) {
+                errorMessage.innerHTML = "No GIFs found, try again!"
+                throw new Error('No GIFs found')
+            }
+            else {
+                errorMessage.innerHTML = ""
+                img.src = response.data.images.original.url;
+        }})
+        .catch(function(error) {
+            console.error('Error:', error);
+        })
+    };
+    fetchGIF('welcome');
+    btn.addEventListener('click',function() { fetchGIF(keyword.value);}, false);
   </script>
 </body>
 </html>
