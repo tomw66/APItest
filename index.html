@@ -6,15 +6,20 @@
 </head>
 <body>
   <img src="#">
+  <button>refresh</button>
   <script>
     const img = document.querySelector('img');
-    fetch('https://api.giphy.com/v1/gifs/translate?api_key=JP2EJSHFNB08NZds0ynuszFsUmkpuadO&s=cats', {mode: 'cors'})
-    .then(function(response) {
-      return response.json();
-    })
-    .then(function(response) {
-      img.src = response.data.images.original.url;
-    });
+    const btn = document.querySelector('button');
+    function fetchGIF() {
+        fetch('https://api.giphy.com/v1/gifs/translate?api_key=JP2EJSHFNB08NZds0ynuszFsUmkpuadO&s=cats', {mode: 'cors'})
+        .then(function(response) {
+        return response.json();
+        })
+        .then(function(response) {
+        img.src = response.data.images.original.url;
+        })};
+    btn.addEventListener('click', fetchGIF);
+    fetchGIF();
   </script>
 </body>
 </html>
